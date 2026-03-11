@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo | Señas a voz</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 760px; margin: 2rem auto; padding: 0 1rem; }
+        .tarjeta { border: 1px solid #ddd; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+        button { background: #0a66ff; color: #fff; border: 0; padding: 0.6rem 1rem; border-radius: 8px; }
+    </style>
+</head>
+<body>
+    <h1>Reconocimiento de lengua de señas (demo)</h1>
+    <p>Sube una imagen del gesto. OpenAI estimará el texto y luego lo convertirá en voz.</p>
+
+    <div class="tarjeta">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ formulario_sena.as_p }}
+            <button type="submit">Traducir a voz</button>
+        </form>
+    </div>
+
+    {% if texto_traducido %}
+    <div class="tarjeta">
+        <h2>Texto detectado</h2>
+        <p>{{ texto_traducido }}</p>
+
+        {% if url_audio_generado %}
+            <h3>Audio generado</h3>
+            <audio controls>
+                <source src="{{ url_audio_generado }}" type="audio/mpeg">
+                Tu navegador no soporta audio.
+            </audio>
+        {% else %}
+            <p>No se generó audio. Verifica la API key o revisa el texto detectado.</p>
+        {% endif %}
+    </div>
+    {% endif %}
+</body>
+</html>
